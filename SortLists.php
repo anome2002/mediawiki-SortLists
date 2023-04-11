@@ -55,9 +55,6 @@ class Sort2Hooks {
 	}
 
 	private static function sortList( $input, $args ) {
-	// Remove asterisks before processing
-	$input = preg_replace('/^\*\s*/', '', $input);
-
 	// Split the input text into separate lines/paragraphs
 	$lines = explode( "\n", $input );
 
@@ -78,26 +75,29 @@ class Sort2Hooks {
 			$link_target = $line;
 		}
 
-		$line_data[] = array( 'line' => $line, 'link_text' => $link_text, 'link_target' => $link_target );
+		// Ignore spaces and blank lines
+		if ( trim( $link_text ) !== '' ) {
+			$line_data[] = array( 'line' => $line, 'link_text' => $link_text, 'link_target' => $link_target );
+		}
 	}
 
 	// Sort the lines based on the link text
 	if ( isset( $args['case'] ) && $args['case'] === 'sensitive' ) {
 		// Case-sensitive sorting
 		usort( $line_data, function( $a, $b ) {
-			return strnatcmp( $a['link_text'], $b['link_text'] );
+			return strnatcmp( str_replace( ' ', '', $a['link_text'] ), str_replace( ' ', '', $b['link_text'] ) );
 		} );
 	} else {
 		// Case-insensitive sorting
 		usort( $line_data, function( $a, $b ) {
-			return strnatcasecmp( $a['link_text'], $b['link_text'] );
+			return strnatcasecmp( str_replace( ' ', '', $a['link_text'] ), str_replace( ' ', '', $b['link_text'] ) );
 		} );
 	}
 
 	// Build the sorted list items
 	$output = '';
 	foreach ( $line_data as $line ) {
-		$output .= $line['line'] . "\n";
+		$output .= preg_replace('/^\* /', '', $line['line']) . "\n";
 	}
 
 	return $output;
