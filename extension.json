@@ -1,0 +1,26 @@
+{
+"name": "SortLists",
+"version": "0.1.0",
+"author": [
+"Edgar Agayi"
+],
+"description": "An extension that generates sorted lists based on existing token lists or separate lines/paragraphs in mediawiki.",
+"url": "https://www.mediawiki.org",
+"license-name": "GPL-3.0-or-later",
+"type": "parserhook",
+"requires": {
+"MediaWiki": ">= 1.35.0"
+},
+"MessagesDirs": {
+"Sort2Hooks": [
+"i18n"
+]
+},
+"AutoloadClasses": {
+"Sort2Hooks": "SortLists.php"
+},
+"Hooks": {
+"ParserFirstCallInit": "Sort2Hooks::onParserFirstCallInit"
+},
+"manifest_version": 2
+}
